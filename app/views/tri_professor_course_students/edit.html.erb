@@ -1,0 +1,11 @@
+<h1>Editing relation</h1>
+
+<%= render "form", tri_professor_course_student: @tri_professor_course_student %>
+
+<br>
+
+<div>
+  <%= link_to "Previous page", :back, class:"btn btn-secondary" %> |
+  <%= link_to "Show this relation", @tri_professor_course_student, class:"btn btn-secondary" %> |
+  <%= link_to "Relations", tri_professor_course_students_path, class: "btn btn-secondary" %>
+</div>

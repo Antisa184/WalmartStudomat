@@ -1,0 +1,15 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @tri_professor_course_student %>
+
+<div>
+  <%= link_to "Previous page", :back, class:"btn btn-secondary" %> |
+  <% if current_user.user_type == 'professor' or current_user.user_type == 'admin'%>
+    <%= link_to "Edit this relation", edit_tri_professor_course_student_path(@tri_professor_course_student), class: "btn btn-secondary" %> |
+  <% end %>
+  <%= link_to "Relations", tri_professor_course_students_path, class: "btn btn-secondary" %>
+
+  <% if current_user.user_type == 'admin' %>
+    <%= button_to "Destroy this relation", @tri_professor_course_student, method: :delete, class: "btn btn-danger btn-sm" %>
+  <% end %>
+</div>

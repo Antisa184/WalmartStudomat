@@ -1,0 +1,44 @@
+<%= form_with(model: student) do |form| %>
+  <% if student.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(student.errors.count, "error") %> prohibited this student from being saved:</h2>
+
+      <ul>
+        <% student.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <br/>
+  <div>
+    <% form.label :firstName, style: "display: block" %>
+    <%= form.text_field :firstName, placeholder:"First name", class:"form-control" %>
+  </div>
+  <br/>
+  <div>
+    <% form.label :lastName, style: "display: block" %>
+    <%= form.text_field :lastName, placeholder:"Last name", class:"form-control" %>
+  </div>
+  <br/>
+  <div>
+    <% form.label :JMBAG, style: "display: block" %>
+    <%= form.text_field :JMBAG, placeholder:"JMBAG", class:"form-control" %>
+  </div>
+  <br/>
+  <div>
+    <% form.label :DOB, style: "display: block" %>
+    <%= form.date_field :DOB, placeholder:"DOB", class:"form-control" %>
+  </div>
+  <br/>
+  <% if current_user.user_type!='admin' %>
+  <div>
+    <% form.label :user_id, style: "display: block" %>
+    <%= form.number_field :user_id, id: :student_user_id, value:current_user.id, class:"form-control", type: :hidden %>
+  </div>
+  <% end %>
+  <br/>
+  <div>
+    <%= form.submit class:"btn btn-primary" %>
+  </div>
+<% end %>

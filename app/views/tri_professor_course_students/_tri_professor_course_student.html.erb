@@ -1,0 +1,25 @@
+<div id="<%= dom_id tri_professor_course_student %>">
+  <p>
+    <strong>Professor:</strong>
+    <% @professor = Professor.find_by_id(tri_professor_course_student.professor_user_id) %>
+      <%= if not @professor.nil? then @professor.name end%>
+  </p>
+
+  <p>
+    <strong>Course name:</strong>
+    <% @course = Course.find_by_id(tri_professor_course_student.course_name) %>
+    <%= @course.name %>
+  </p>
+
+  <p>
+    <strong>Student:</strong>
+    <% @student = Student.find_by_id(tri_professor_course_student.student_user_id) %>
+    <%= @student.name %>
+  </p>
+
+  <p>
+    <strong>Grade:</strong>
+    <%= tri_professor_course_student.grade %>
+  </p>
+
+</div>

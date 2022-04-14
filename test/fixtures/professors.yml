@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  firstName: MyString
+  lastName: MyString
+  DOB: 2022-03-29
+  OIB: MyString
+
+two:
+  firstName: MyString
+  lastName: MyString
+  DOB: 2022-03-29
+  OIB: MyString

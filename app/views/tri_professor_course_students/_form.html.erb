@@ -1,0 +1,43 @@
+<%= form_with(model: tri_professor_course_student) do |form| %>
+  <% if tri_professor_course_student.errors.any? %>
+    <div style="color: red">
+      <h2><%= pluralize(tri_professor_course_student.errors.count, "error") %> prohibited this tri_professor_course_student from being saved:</h2>
+
+      <ul>
+        <% tri_professor_course_student.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if current_user.user_type == 'admin'%>
+  <div>
+    <%= form.label :professor_user_id, style: "display: block" %>
+    <%= form.select :professor_user_id,
+                    options_for_select(Professor.all.pluck(:firstName, :lastName, :oib, :id).map { |firstName, lastName, oib, id| ["#{firstName} #{lastName}, OIB:#{oib}",id ]}),
+                    {prompt:'Select professor'},
+                    disabled: if current_user.user_type== 'professor' then true else false end %>
+  </div>
+
+  <div>
+    <%= form.label :course_name, style: "display: block" %>
+    <%= form.select :course_name, options_for_select(Course.all.pluck(:name, :id)),{prompt:'Select course'},
+                    disabled: if current_user.user_type== 'professor' then true else false end %>
+  </div>
+
+  <div>
+    <%= form.label :student_user_id, style: "display: block" %>
+    <%= form.select :student_user_id,
+                    options_for_select(Student.all.pluck(:firstName, :lastName, :jmbag, :id).map { |firstName, lastName, jmbag, id| ["#{firstName} #{lastName}, JMBAG:#{jmbag}", id]}),
+                    {prompt:'Select student'},
+                    disabled: if current_user.user_type== 'professor' then true else false end %>
+  </div>
+  <% end %>
+  <div>
+    <%= form.label :grade, style: "display: block" %>
+    <%= form.number_field :grade %>
+  </div>
+  <div>
+    <%= form.submit %>
+  </div>
+<% end %>

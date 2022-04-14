@@ -1,0 +1,107 @@
+<p style="color: green"><%= notice %></p>
+
+<% if current_user.user_type == 'student' %>
+  <h1>My classes</h1>
+<% elsif current_user.user_type == 'admin'%>
+  <h1>All relations</h1>
+<% elsif current_user.user_type == 'professor' %>
+  <h1>My courses and students</h1>
+<% end %>
+
+<div id="tri_professor_course_students">
+    <% if current_user.user_type == 'admin' %>
+    <table class="table table-striped table-bordered table-hover">
+      <thead class="table-dark ">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Professor</th>
+        <th scope="col">Course</th>
+        <th scope="col">Student</th>
+        <th scope="col">Grade</th>
+        <th colspan="3"></th>
+      </tr>
+      </thead>
+      <div id="tri_professor_course_students">
+        <tbody>
+      <% @tri_professor_course_students.sort { |a,b| Professor.find_by_id(a.professor_user_id).name <=> Professor.find_by_id(b.professor_user_id).name }
+             .each_with_index do |tri_professor_course_student, index| tri_professor_course_student %>
+
+        <td> <%= index+1 %> </td>
+        <td> <%= link_to Professor.find_by_id(tri_professor_course_student.professor_user_id).name, professor_path(tri_professor_course_student.professor_user_id) %> </td>
+        <td> <%= link_to Course.find_by_id(tri_professor_course_student.course_name).name, course_path(tri_professor_course_student.course_name) %> </td>
+        <td> <%= link_to Student.find_by_id(tri_professor_course_student.student_user_id).name, student_path(tri_professor_course_student.student_user_id) %> </td>
+        <td> <%= tri_professor_course_student.grade %> </td>
+        <td> <%= link_to "Show", tri_professor_course_student %> </td>
+        <td> <%= link_to "Edit", edit_tri_professor_course_student_path(tri_professor_course_student) %> </td>
+        <td> <%= link_to 'Delete', tri_professor_course_student, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger btn-sm" %></td>
+        </tbody>
+    <%end %>
+    </div>
+    </table>
+
+    <% elsif (current_user.user_type == 'professor')%>
+      <%
+        @courses = Set[]
+        @this_professor = Professor.find_by_user_id(current_user.id)
+        @tri_professor_course_students.each do |tri_professor_course_student|
+          if tri_professor_course_student.professor_user_id == @this_professor.id
+            @courses.add(tri_professor_course_student.course_name)
+          end
+        end
+      %>
+      <% @courses.each do |course_id| %>
+        <h3><%= Course.find_by_id(course_id).name %></h3>
+        <table class="table table-striped table-bordered table-hover">
+          <thead class="table-dark ">
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Student</th>
+            <th scope="col">Grade</th>
+            <th colspan="1"></th>
+          </tr>
+          </thead>
+          <div id="tri_professor_course_students">
+            <tbody>
+            <% @tri_professor_course_students.each_with_index do |tri_professor_course_student, index| tri_professor_course_student  %>
+            <%if tri_professor_course_student.professor_user_id == Professor.find_by_user_id(current_user.id).id and tri_professor_course_student.course_name == course_id%>
+              <td> <%= index+1 %> </td>
+              <td> <%= link_to Student.find_by_id(tri_professor_course_student.student_user_id).name, student_path(tri_professor_course_student.student_user_id) %> </td>
+              <td> <%= tri_professor_course_student.grade %> </td>
+              <td> <%= link_to "Edit grade", edit_tri_professor_course_student_path(tri_professor_course_student) %> </td>
+            <%end %>
+            </tbody>
+            <% end %>
+            </div>
+        </table>
+      <% end %>
+
+    <%elsif current_user.user_type == 'student' %>
+    <table class="table table-striped table-bordered table-hover">
+      <thead class="table-dark ">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Course</th>
+        <th scope="col">Professor</th>
+        <th scope="col">Grade</th>
+      </tr>
+      </thead>
+      <div id="tri_professor_course_students">
+        <tbody>
+        <% @tri_professor_course_students.each_with_index do |tri_professor_course_student, index| tri_professor_course_student  %>
+          <%if tri_professor_course_student.student_user_id == Student.find_by_user_id(current_user.id).id %>
+            <td> <%= index+1 %> </td>
+            <td> <%= link_to Course.find_by_id(tri_professor_course_student.course_name).name, course_path(tri_professor_course_student.course_name) %> </td>
+            <td> <%= link_to Professor.find_by_id(tri_professor_course_student.professor_user_id).name, professor_path(tri_professor_course_student.professor_user_id) %> </td>
+            <td> <%= tri_professor_course_student.grade %> </td>
+          <%end %>
+          </tbody>
+        <% end %>
+        </div>
+    </table>
+
+    <% end %>
+</div>
+<%= link_to "Previous page", :back, class:"btn btn-secondary" %>
+<% if current_user.user_type == 'admin' %>
+| <%= link_to "New relation", new_tri_professor_course_student_path, class: "btn btn-secondary" %>
+<% end %>
