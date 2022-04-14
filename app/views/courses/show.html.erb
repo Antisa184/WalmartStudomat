@@ -1,0 +1,15 @@
+<p style="color: green"><%= notice %></p>
+
+<%= render @course %>
+
+<div>
+  <% if current_user.user_type == 'admin' %>
+  <%= link_to "Edit this course", edit_course_path(@course) %> |
+  <% end %>
+
+  <%= link_to "Previous page", :back, class:"btn btn-secondary" %> |
+  <%= link_to "Courses", courses_path, class:"btn btn-secondary" %>
+  <% if current_user.user_type == 'admin' %>
+  <%= button_to "Destroy this course", @course, method: :delete, data: { turbo_confirm: 'Are you sure?' }, class:"btn btn-danger-sm" %>
+  <% end %>
+</div>
